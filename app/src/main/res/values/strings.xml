@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Notepad</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- alert_note -->
+    <string name="create_new_note">Create new note</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_save">Save</string>
+
+    <!-- view_single_note -->
+    <string name="example_title">Example title lorem ipsu skrzy</string>
+    <string name="example_date">3 06 2019, 21:37:54</string>
+
+
+
+
+
+
+
+
+
+</resources>
