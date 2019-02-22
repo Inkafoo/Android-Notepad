@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#757575</color>
+    <color name="colorPrimaryDark">#757575</color>
+    <color name="colorAccent">#FF3982</color>
 
     <!-- alert_note -->
     <color name="textColor">#000000</color>
@@ -10,9 +10,11 @@
 
 
     <!-- view_single_note -->
-    <color name="background_color">#FFF293</color>
-    <color name="cancel_btn_color">#9AFF8E</color>
-    <color name="save_btn_color">#FF8E8E</color>
+    <color name="background_color">#FFE857</color>
+    <color name="cancel_btn_color">#52BD46</color>
+    <color name="save_btn_color">#BD4646</color>
 
+    <!-- activity_main -->
+    <color name="background_main_activity">#18B400</color>
 
 </resources>

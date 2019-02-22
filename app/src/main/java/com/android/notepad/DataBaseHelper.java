@@ -1,5 +1,6 @@
 package com.android.notepad;
 
+import android.content.ClipData;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -7,9 +8,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DataBaseHelper extends SQLiteOpenHelper {
 
-    private static final String TABLE_NAME = "notepad_databasee";
+    private static final String TABLE_NAME = "notepad_database";
 
     private static final String COL_ID = "id";
     private static final String COL_TITLE = "title";
@@ -68,11 +72,62 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public Cursor getData(){
+
+
+    public List<NoteModel> getdata(){
+
+        List<NoteModel> data = new ArrayList<>();
+        String query = "SELECT * FROM " +TABLE_NAME;
+        Cursor cursor = getSqLiteDatabase().rawQuery(query,null);
+        StringBuffer stringBuffer = new StringBuffer();
+
+
+        while (cursor.moveToNext()) {
+            String title = cursor.getString(cursor.getColumnIndexOrThrow(COL_TITLE));
+            String note = cursor.getString(cursor.getColumnIndexOrThrow(COL_NOTE));
+            String date = cursor.getString(cursor.getColumnIndexOrThrow(COL_DATE));
+            NoteModel noteModel = new NoteModel(title, note, date);
+            stringBuffer.append(noteModel);
+            data.add(noteModel);
+        }
+
+
+        return data;
+    }
+
+
+
+
+
+
+
+
+    public Cursor getWholeDatabase(){
         String query = "SELECT * FROM " + TABLE_NAME;
         Cursor data = getSqLiteDatabase().rawQuery(query, null);
 
         return data;
+    }
+
+    public Cursor getTitle(){
+        String query = "SELECT " + COL_TITLE + " FROM " + TABLE_NAME;
+        Cursor titleRow = getSqLiteDatabase().rawQuery(query, null);
+
+        return titleRow;
+    }
+
+    public Cursor getNote(){
+        String query = "SELECT " + COL_NOTE + " FROM " + TABLE_NAME;
+        Cursor noteRow = getSqLiteDatabase().rawQuery(query, null);
+
+        return noteRow;
+    }
+
+    public Cursor getDate(){
+        String query = "SELECT " + COL_DATE + " FROM " + TABLE_NAME;
+        Cursor dateRow = getSqLiteDatabase().rawQuery(query, null);
+
+        return dateRow;
     }
 
     public int getRowsCount(){
@@ -83,21 +138,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         return count;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

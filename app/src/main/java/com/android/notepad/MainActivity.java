@@ -1,5 +1,6 @@
 package com.android.notepad;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -7,9 +8,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
@@ -19,17 +22,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Scroller;
 import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * https://github.com/mitchtabian/SaveReadWriteDeleteSQLite/blob/master/SaveAndDisplaySQL/app/src/main/java/com/tabian/saveanddisplaysql/DatabaseHelper.java
  * ctrl + p = parameters method
- * https://dzone.com/articles/create-a-database-android-application-in-android-s tutorial dobre ej dobre
+ * https://dzone.com/articles/create-a-database-android-application-in-android-s tutorial
+ * https://www.mytrendin.com/display-data-recyclerview-using-sqlitecursor-in-android/ recyclerview
  */
 
 
@@ -41,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton fab;
     RecyclerView mRecyclerView;
     RecyclerView.Adapter mRecyclerAdapter;
+    List<NoteModel> noteModelList;
 
 
     @Override
@@ -50,9 +57,12 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        noteModelList = new ArrayList<>();
         dataBaseHelper = new DataBaseHelper(context);
-        fab = findViewById(R.id.fab);
+
         mRecyclerView  = findViewById(R.id.list_recycler);
+        fab = findViewById(R.id.fab);
+
 
         loadDatabaseList();
 
@@ -67,36 +77,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadDatabaseList() {
 
-    mRecyclerView.setHasFixedSize(true);
-    mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-    mRecyclerAdapter = new RecyclerViewAdapter(context);
+         noteModelList = dataBaseHelper.getdata();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-       //Cursor data = dataBaseHelper.getData();
-
-       //ArrayList<String> listData = new ArrayList<>();
-       //while(data.moveToNext()){
-       //    listData.add(data.getString(0));
-       //    listData.add(data.getString(1));
-       //    listData.add(data.getString(2));
-       //}
-
-       //ListAdapter listAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, listData);
-       //notesListView.setAdapter(listAdapter);
+         mRecyclerAdapter = new RecyclerViewAdapter(context, noteModelList);
+         mRecyclerView.setHasFixedSize(true);
+         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+         mRecyclerView.setAdapter(mRecyclerAdapter);
     }
-
 
     private void showNewNoteAlert() {
         //create alertDialog
@@ -112,6 +100,11 @@ public class MainActivity extends AppCompatActivity {
         final EditText edtNote = alertDialog.findViewById(R.id.edit_note);
         Button btnCancel = alertDialog.findViewById(R.id.btn_cancel);
         Button btnSave = alertDialog.findViewById(R.id.btn_save);
+
+        edtNote.setScroller(new Scroller(context));
+        edtNote.setMaxLines(6);
+        edtNote.setVerticalScrollBarEnabled(true);
+        edtNote.setMovementMethod(new ScrollingMovementMethod());
 
         //handle listeners
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -139,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean addNewNote(String title, String note){
-        DateFormat dateFormat = new SimpleDateFormat("d MMM yyyy, HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss, d MMM yyyy");
         String todayDate = dateFormat.format(Calendar.getInstance().getTime());
 
         boolean insertData = dataBaseHelper.addData(title, note, todayDate);

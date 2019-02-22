@@ -5,7 +5,9 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@color/background_alert_color"
-    android:layout_margin="30dp">
+    android:layout_margin="10dp">
+
+
 
     <TextView
         android:id="@+id/text_heading"
@@ -33,22 +35,23 @@
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:hint="Title"
-                 android:maxLength="25"
-                 android:maxLines="3"
-                 android:layout_marginRight="30dp"
-                 android:layout_marginLeft="30dp"
+                 android:inputType="text"
+                 android:maxLength="27"
+                 android:textSize="18sp"
+                 android:layout_marginRight="20dp"
+                 android:layout_marginLeft="20dp"
                  android:layout_marginBottom="10dp"
                  android:layout_marginTop="10dp" />
 
              <EditText
                  android:id="@+id/edit_note"
                  android:layout_width="match_parent"
-                 android:maxLines="15"
                  android:layout_height="wrap_content"
                  android:hint="Note"
-                 android:layout_marginRight="30dp"
-                 android:layout_marginLeft="30dp"
-                 android:layout_marginBottom="30dp" />
+                 android:textSize="16sp"
+                 android:layout_marginRight="20dp"
+                 android:layout_marginLeft="20dp"
+                 android:layout_marginBottom="22dp" />
 
     </LinearLayout>
 
