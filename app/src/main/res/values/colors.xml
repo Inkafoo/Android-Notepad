@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#757575</color>
-    <color name="colorPrimaryDark">#757575</color>
-    <color name="colorAccent">#FF3982</color>
+    <color name="colorPrimary">#EEDB57</color>
+    <color name="colorPrimaryDark">#BEAD41</color>
+    <color name="colorAccent">#EEDB57</color>
 
     <!-- alert_note -->
-    <color name="textColor">#000000</color>
-    <color name="background_alert_color">#F5E478</color>
+    <color name="background_color_note">#6CA4F8</color>
+    <color name="night_mode">#6B6B6B</color>
+
+    <!-- activity_note -->
+    <color name="text_color">#000000</color>
+    <color name="text_color_night_mode">#FFFFFF</color>
+    <color name="background_alert_color">#EEDB57</color>
 
 
     <!-- view_single_note -->
-    <color name="background_color">#FFE857</color>
-    <color name="cancel_btn_color">#52BD46</color>
-    <color name="save_btn_color">#BD4646</color>
+    <color name="background_color">#EEDB57</color>
+    <color name="save_btn_color">#52BD46</color>
+    <color name="cancel_btn_color">#BD4646</color>
 
     <!-- activity_main -->
-    <color name="background_main_activity">#18B400</color>
+    <color name="background_main_activity">#6CA4F8</color>
+
+
+
 
 </resources>

@@ -1,11 +1,10 @@
 package com.android.notepad;
 
-import android.content.ClipData;
 import android.content.Context;
-import android.database.Cursor;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -15,13 +14,9 @@ import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
-import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Scroller;
 import android.widget.Toast;
 
@@ -31,12 +26,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-/**
- * https://github.com/mitchtabian/SaveReadWriteDeleteSQLite/blob/master/SaveAndDisplaySQL/app/src/main/java/com/tabian/saveanddisplaysql/DatabaseHelper.java
- * ctrl + p = parameters method
- * https://dzone.com/articles/create-a-database-android-application-in-android-s tutorial
- * https://www.mytrendin.com/display-data-recyclerview-using-sqlitecursor-in-android/ recyclerview
- */
 
 
 public class MainActivity extends AppCompatActivity {
@@ -44,40 +33,56 @@ public class MainActivity extends AppCompatActivity {
     Context context = this;
     DataBaseHelper dataBaseHelper;
 
-    FloatingActionButton fab;
     RecyclerView mRecyclerView;
     RecyclerView.Adapter mRecyclerAdapter;
     List<NoteModel> noteModelList;
 
+    FloatingActionButton fab;
+    RelativeLayout contentLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //prepare layoutActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(Color.BLACK);
+        this.overridePendingTransition(0, 0);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("SSP", MODE_PRIVATE);
+        boolean nightMode = sharedPreferences.getBoolean("nightModeBoolean", false);
+
+
+        //find elements
+        mRecyclerView  = findViewById(R.id.list_recycler);
+        fab = findViewById(R.id.fab);
+        contentLayout = findViewById(R.id.main_layout_content);
+
+        // create new
         noteModelList = new ArrayList<>();
         dataBaseHelper = new DataBaseHelper(context);
 
-        mRecyclerView  = findViewById(R.id.list_recycler);
-        fab = findViewById(R.id.fab);
 
-
+        //methods in onCreate
         loadDatabaseList();
-
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
              showNewNoteAlert();
             }
         });
+
+        if(nightMode == true){
+            contentLayout.setBackgroundResource(R.color.night_mode);
+        }else{
+            contentLayout.setBackgroundResource(R.color.background_main_activity);
+        }
     }
 
-    private void loadDatabaseList() {
 
-         noteModelList = dataBaseHelper.getdata();
+    private void loadDatabaseList() {
+         noteModelList = dataBaseHelper.getData();
 
          mRecyclerAdapter = new RecyclerViewAdapter(context, noteModelList);
          mRecyclerView.setHasFixedSize(true);
@@ -87,13 +92,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showNewNoteAlert() {
-        //create alertDialog
+        //create, show alertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = LayoutInflater.from(context).inflate(R.layout.alert_note, null);
         builder.setView(view);
         final AlertDialog alertDialog = builder.create();
         alertDialog.setCancelable(false);
         alertDialog.show();
+
 
         //find alertDialog view elements
         final EditText edtTitle = alertDialog.findViewById(R.id.edit_title);
@@ -105,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         edtNote.setMaxLines(6);
         edtNote.setVerticalScrollBarEnabled(true);
         edtNote.setMovementMethod(new ScrollingMovementMethod());
+
 
         //handle listeners
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -138,11 +145,11 @@ public class MainActivity extends AppCompatActivity {
         boolean insertData = dataBaseHelper.addData(title, note, todayDate);
 
         if(insertData){
-            toastMessage("Data successfully inserted!");
+            toastMessage("Note successfully inserted!");
             loadDatabaseList();
             return true;
         }else{
-            toastMessage("Something went wrong");
+            toastMessage("Something went wrong \n Try again ");
             return false;
         }
     }
@@ -150,27 +157,5 @@ public class MainActivity extends AppCompatActivity {
     private void toastMessage(String message){
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
